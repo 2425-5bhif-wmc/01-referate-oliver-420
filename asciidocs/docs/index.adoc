@@ -1,6 +1,7 @@
 = Cron Jobs: Automated Backups for PostgreSQL
 Daxinger Oliver
 {docdate}
+ifndef::sourcedir[:sourcedir: ../src/main/java]
 ifndef::imagesdir[:imagesdir: images]
 ifndef::backend[:backend: html5]
 :icons: font
@@ -222,27 +223,34 @@ pg_restore -U app -h localhost -d db backup/backupDir
 
 == Cron jobs
 
-=== Definition
+=== Was ist das?
 Cron-Jobs sind zeitgesteuerte Aufgaben, die auf Unix- oder Linux-Systemen im Hintergrund automatisch ausgeführt werden.
 Sie werden über den Cron-Dienst verwaltet und können so konfiguriert werden, dass sie Skripte, Befehle oder Programme
 zu bestimmten Zeitpunkten oder in festgelegten Intervallen ausführen. Die Konfiguration erfolgt üblicherweise über
 die Crontab-Datei.
 
-=== Typische Anwendungsfälle
+=== Wie funktionieren Cron jobs?
 
-* Automatisierte Backups
-** Regelmäßiges Sichern von Datenbanken, Dateien oder Servern.
+* Crontab-Dateien
+** Diese Dateien sind die 'Konfiguration' für Cron-Jobs.
+** Jeder Benutzer hat eine Crontab-Datei, in der die einzelnen Aufgaben definiert werden.
 
-* Systemwartung
-** Aufgaben wie das Leeren von temporären Dateien, das Rotieren von Logs oder das Aktualisieren von Paketen.
+* Cron-Dienst
+** Ein Cron-Daemon läuft die ganze Zeit im Hintergrund und überwacht die Crontab-Dateien aller Benutzer.
+** Dieser Daemon führt die definierten Aufgaben zum gegebenen Zeitplan aus.
 
-* Datenverarbeitung
-** Verarbeitung oder Synchronisierung von Daten wie das Abrufen von APIs, das Erstellen von Log-Daten oder das Generieren von Berichten.
+* Zeitangaben
+** Die verwendete Zeit von Cron ist die des Systems, auf dem es läuft.
+** Cron überprüft minütlich, ob eine Aufgabe ausgeführt werden muss.
 
-* Benachrichtigungen
-** Versenden von Erinnerungen, Alerts oder Zusammenfassungen.
+* Ausführung
+** Befehle oder Skripts werden zur festgelegten Zeit oder in festgelegten Intervallen ausgeführt.
+** Die Ausgabe kann man in einer Log-Datei speichern oder per E-Mail versenden, sofern konfiguriert.
 
 === Vorteile & Nachteile
+
+Cron-Jobs sind das A&O für die Automatisierung von Aufgaben, jedoch gibt es neben den
+zahlreichen Vorteilen auch einige Nachteile.
 
 ==== Vorteile
 
@@ -272,29 +280,27 @@ die Crontab-Datei.
 * Skalierbarkeit
 ** Bei vielen Aufgaben kann die Verwaltung und Überwachung von Cron-Jobs schwierig werden.
 
-=== Funktionsweise
+=== Typische Anwendungsfälle
 
-* Cron-Dienst
-** Ein Cron-Daemon läuft die ganze Zeit im Hintergrund und überwacht die Crontab-Dateien aller Benutzer.
-** Dieser Daemon führt die definierten Aufgaben zum gegebenen Zeitplan aus.
+Cron Jobs werden beinahe überall eingesetzt, wo regelmäßige oder zeitgesteuerte Aufgaben anfallen, wie zum Beispiel:
 
-* Crontab-Dateien
-** Diese Dateien sind die 'Konfiguration' für Cron-Jobs.
-** Jeder Benutzer hat eine Crontab-Datei, in der die einzelnen Aufgaben definiert werden.
+* Automatisierte Backups
+** Regelmäßiges Sichern von Datenbanken, Dateien oder Servern.
 
-* Zeitangaben
-** Die verwendete Zeit von Cron ist die des Systems, auf dem es läuft.
-** Cron überprüft minütlich, ob eine Aufgabe ausgeführt werden muss.
+* Systemwartung
+** Aufgaben wie das Leeren von temporären Dateien, das Rotieren von Logs oder das Aktualisieren von Paketen.
 
-* Ausführung
-** Befehle oder Skripts werden zur festgelegten Zeit oder in festgelegten Intervallen ausgeführt.
-** Die Ausgabe kann man in einer Log-Datei speichern oder per E-Mail versenden, sofern konfiguriert.
+* Datenverarbeitung
+** Verarbeitung oder Synchronisierung von Daten wie das Abrufen von APIs, das Erstellen von Log-Daten oder das Generieren von Berichten.
+
+* Benachrichtigungen
+** Versenden von Erinnerungen, Alerts oder Zusammenfassungen.
+
 
 === Cronjob Syntax
 
-image::images/cron_syntax.png[]
-
-=== Beispiele
+ifdef::backend-html5,backend-revealjs[image:cron_syntax.png[]]
+ifdef::backend-pdf[image:cron_syntax.png[]]
 
 == Cronjobs und PostgreSQL
 
