@@ -122,12 +122,6 @@ pg_dump -U app -h localhost -F d -f backup/backupDir db
 
 ====
 
-
-
-//TODO: pg_dumpall wenn ich das wirklich brauche
-// Erstellt ein Backup eines kompletten PostgreSQL-Clusters mit allen Datenbanken, Schema, Rollen und
-// Clusterweiten Einstellungen. +
-
 === Restore
 Um eine PostgreSQL-Datenbank im Falle eines Datenverlusts wiederherzustellen, benutzt man die Werkzeuge `psql` oder
 `pg_restore`. +
@@ -226,19 +220,79 @@ pg_restore -U app -h localhost -d db backup/backupDir
 
 ====
 
-== Was sind Cronjobs?
+== Cron jobs
 
 === Definition
+Cron-Jobs sind zeitgesteuerte Aufgaben, die auf Unix- oder Linux-Systemen im Hintergrund automatisch ausgeführt werden.
+Sie werden über den Cron-Dienst verwaltet und können so konfiguriert werden, dass sie Skripte, Befehle oder Programme
+zu bestimmten Zeitpunkten oder in festgelegten Intervallen ausführen. Die Konfiguration erfolgt üblicherweise über
+die Crontab-Datei.
 
 === Typische Anwendungsfälle
 
+* Automatisierte Backups
+** Regelmäßiges Sichern von Datenbanken, Dateien oder Servern.
+
+* Systemwartung
+** Aufgaben wie das Leeren von temporären Dateien, das Rotieren von Logs oder das Aktualisieren von Paketen.
+
+* Datenverarbeitung
+** Verarbeitung oder Synchronisierung von Daten wie das Abrufen von APIs, das Erstellen von Log-Daten oder das Generieren von Berichten.
+
+* Benachrichtigungen
+** Versenden von Erinnerungen, Alerts oder Zusammenfassungen.
+
 === Vorteile & Nachteile
 
-== Aufbau und Funktionsweise
+==== Vorteile
+
+* Automatisierung
+** Wiederkehrende Aufgaben können ohne manuellen Eingriff erledigt werden.
+
+* Flexibilität
+** Feine Zeitsteuerung für beliebige Zeitpläne.
+
+* Effizienz
+** Spart Zeit und reduziert die Wahrscheinlichkeit von menschlichen Fehlern.
+
+* Einfachheit
+** Minimaler Ressourcenverbrauch und einfache Konfiguration.
+
+==== Nachteile
+
+* Komplexität bei Fehlern
+** Fehler bei der Konfiguration (z. B. falsche Zeitangaben) sind schwer zu fixen.
+
+* Limitierte Logging-Funktionalität
+** Ohne spezielle Vorkehrungen sind Cron-Jobs schwer zu überwachen.
+
+* Sicherheitsrisiken
+** Unvorsichtige Konfiguration kann Sicherheitslücken öffnen.
+
+* Skalierbarkeit
+** Bei vielen Aufgaben kann die Verwaltung und Überwachung von Cron-Jobs schwierig werden.
+
+=== Funktionsweise
+
+* Cron-Dienst
+** Ein Cron-Daemon läuft die ganze Zeit im Hintergrund und überwacht die Crontab-Dateien aller Benutzer.
+** Dieser Daemon führt die definierten Aufgaben zum gegebenen Zeitplan aus.
+
+* Crontab-Dateien
+** Diese Dateien sind die 'Konfiguration' für Cron-Jobs.
+** Jeder Benutzer hat eine Crontab-Datei, in der die einzelnen Aufgaben definiert werden.
+
+* Zeitangaben
+** Die verwendete Zeit von Cron ist die des Systems, auf dem es läuft.
+** Cron überprüft minütlich, ob eine Aufgabe ausgeführt werden muss.
+
+* Ausführung
+** Befehle oder Skripts werden zur festgelegten Zeit oder in festgelegten Intervallen ausgeführt.
+** Die Ausgabe kann man in einer Log-Datei speichern oder per E-Mail versenden, sofern konfiguriert.
 
 === Cronjob Syntax
 
-=== Zeitangaben
+image::images/cron_syntax.png[]
 
 === Beispiele
 
