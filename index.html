@@ -578,12 +578,11 @@ pre.rouge .gs {
 </li>
 <li><a href="#_cron_jobs">2. Cron jobs</a>
 <ul class="sectlevel2">
-<li><a href="#_definition">2.1. Definition</a></li>
-<li><a href="#_typische_anwendungsfälle">2.2. Typische Anwendungsfälle</a></li>
+<li><a href="#_was_ist_das">2.1. Was ist das?</a></li>
+<li><a href="#_wie_funktionieren_cron_jobs">2.2. Wie funktionieren Cron jobs?</a></li>
 <li><a href="#_vorteile_nachteile">2.3. Vorteile &amp; Nachteile</a></li>
-<li><a href="#_funktionsweise">2.4. Funktionsweise</a></li>
+<li><a href="#_typische_anwendungsfälle">2.4. Typische Anwendungsfälle</a></li>
 <li><a href="#_cronjob_syntax">2.5. Cronjob Syntax</a></li>
-<li><a href="#_beispiele">2.6. Beispiele</a></li>
 </ul>
 </li>
 <li><a href="#_cronjobs_und_postgresql">3. Cronjobs und PostgreSQL</a>
@@ -909,7 +908,7 @@ Andere Formate können mit der Option <code>-F</code> angegeben werden.
 <h2 id="_cron_jobs"><a class="anchor" href="#_cron_jobs"></a>2. Cron jobs</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_definition"><a class="anchor" href="#_definition"></a>2.1. Definition</h3>
+<h3 id="_was_ist_das"><a class="anchor" href="#_was_ist_das"></a>2.1. Was ist das?</h3>
 <div class="paragraph">
 <p>Cron-Jobs sind zeitgesteuerte Aufgaben, die auf Unix- oder Linux-Systemen im Hintergrund automatisch ausgeführt werden.
 Sie werden über den Cron-Dienst verwaltet und können so konfiguriert werden, dass sie Skripte, Befehle oder Programme
@@ -918,45 +917,57 @@ die Crontab-Datei.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_typische_anwendungsfälle"><a class="anchor" href="#_typische_anwendungsfälle"></a>2.2. Typische Anwendungsfälle</h3>
+<h3 id="_wie_funktionieren_cron_jobs"><a class="anchor" href="#_wie_funktionieren_cron_jobs"></a>2.2. Wie funktionieren Cron jobs?</h3>
 <div class="ulist">
 <ul>
 <li>
-<p>Automatisierte Backups</p>
+<p>Crontab-Dateien</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Regelmäßiges Sichern von Datenbanken, Dateien oder Servern.</p>
+<p>Diese Dateien sind die 'Konfiguration' für Cron-Jobs.</p>
+</li>
+<li>
+<p>Jeder Benutzer hat eine Crontab-Datei, in der die einzelnen Aufgaben definiert werden.</p>
 </li>
 </ul>
 </div>
 </li>
 <li>
-<p>Systemwartung</p>
+<p>Cron-Dienst</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Aufgaben wie das Leeren von temporären Dateien, das Rotieren von Logs oder das Aktualisieren von Paketen.</p>
+<p>Ein Cron-Daemon läuft die ganze Zeit im Hintergrund und überwacht die Crontab-Dateien aller Benutzer.</p>
+</li>
+<li>
+<p>Dieser Daemon führt die definierten Aufgaben zum gegebenen Zeitplan aus.</p>
 </li>
 </ul>
 </div>
 </li>
 <li>
-<p>Datenverarbeitung</p>
+<p>Zeitangaben</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Verarbeitung oder Synchronisierung von Daten wie das Abrufen von APIs, das Erstellen von Log-Daten oder das Generieren von Berichten.</p>
+<p>Die verwendete Zeit von Cron ist die des Systems, auf dem es läuft.</p>
+</li>
+<li>
+<p>Cron überprüft minütlich, ob eine Aufgabe ausgeführt werden muss.</p>
 </li>
 </ul>
 </div>
 </li>
 <li>
-<p>Benachrichtigungen</p>
+<p>Ausführung</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Versenden von Erinnerungen, Alerts oder Zusammenfassungen.</p>
+<p>Befehle oder Skripts werden zur festgelegten Zeit oder in festgelegten Intervallen ausgeführt.</p>
+</li>
+<li>
+<p>Die Ausgabe kann man in einer Log-Datei speichern oder per E-Mail versenden, sofern konfiguriert.</p>
 </li>
 </ul>
 </div>
@@ -966,6 +977,10 @@ die Crontab-Datei.</p>
 </div>
 <div class="sect2">
 <h3 id="_vorteile_nachteile"><a class="anchor" href="#_vorteile_nachteile"></a>2.3. Vorteile &amp; Nachteile</h3>
+<div class="paragraph">
+<p>Cron-Jobs sind das A&amp;O für die Automatisierung von Aufgaben, jedoch gibt es neben den
+zahlreichen Vorteilen auch einige Nachteile.</p>
+</div>
 <div class="sect3">
 <h4 id="_vorteile"><a class="anchor" href="#_vorteile"></a>2.3.1. Vorteile</h4>
 <div class="ulist">
@@ -1062,57 +1077,48 @@ die Crontab-Datei.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_funktionsweise"><a class="anchor" href="#_funktionsweise"></a>2.4. Funktionsweise</h3>
+<h3 id="_typische_anwendungsfälle"><a class="anchor" href="#_typische_anwendungsfälle"></a>2.4. Typische Anwendungsfälle</h3>
+<div class="paragraph">
+<p>Cron Jobs werden beinahe überall eingesetzt, wo regelmäßige oder zeitgesteuerte Aufgaben anfallen, wie zum Beispiel:</p>
+</div>
 <div class="ulist">
 <ul>
 <li>
-<p>Cron-Dienst</p>
+<p>Automatisierte Backups</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Ein Cron-Daemon läuft die ganze Zeit im Hintergrund und überwacht die Crontab-Dateien aller Benutzer.</p>
-</li>
-<li>
-<p>Dieser Daemon führt die definierten Aufgaben zum gegebenen Zeitplan aus.</p>
+<p>Regelmäßiges Sichern von Datenbanken, Dateien oder Servern.</p>
 </li>
 </ul>
 </div>
 </li>
 <li>
-<p>Crontab-Dateien</p>
+<p>Systemwartung</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Diese Dateien sind die 'Konfiguration' für Cron-Jobs.</p>
-</li>
-<li>
-<p>Jeder Benutzer hat eine Crontab-Datei, in der die einzelnen Aufgaben definiert werden.</p>
+<p>Aufgaben wie das Leeren von temporären Dateien, das Rotieren von Logs oder das Aktualisieren von Paketen.</p>
 </li>
 </ul>
 </div>
 </li>
 <li>
-<p>Zeitangaben</p>
+<p>Datenverarbeitung</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Die verwendete Zeit von Cron ist die des Systems, auf dem es läuft.</p>
-</li>
-<li>
-<p>Cron überprüft minütlich, ob eine Aufgabe ausgeführt werden muss.</p>
+<p>Verarbeitung oder Synchronisierung von Daten wie das Abrufen von APIs, das Erstellen von Log-Daten oder das Generieren von Berichten.</p>
 </li>
 </ul>
 </div>
 </li>
 <li>
-<p>Ausführung</p>
+<p>Benachrichtigungen</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Befehle oder Skripts werden zur festgelegten Zeit oder in festgelegten Intervallen ausgeführt.</p>
-</li>
-<li>
-<p>Die Ausgabe kann man in einer Log-Datei speichern oder per E-Mail versenden, sofern konfiguriert.</p>
+<p>Versenden von Erinnerungen, Alerts oder Zusammenfassungen.</p>
 </li>
 </ul>
 </div>
@@ -1122,15 +1128,9 @@ die Crontab-Datei.</p>
 </div>
 <div class="sect2">
 <h3 id="_cronjob_syntax"><a class="anchor" href="#_cronjob_syntax"></a>2.5. Cronjob Syntax</h3>
-<div class="imageblock">
-<div class="content">
-<img src="images/images/cron_syntax.png" alt="cron syntax">
+<div class="paragraph">
+<p><span class="image"><img src="images/cron_syntax.png" alt="cron syntax"></span></p>
 </div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_beispiele"><a class="anchor" href="#_beispiele"></a>2.6. Beispiele</h3>
-
 </div>
 </div>
 </div>
@@ -1193,7 +1193,7 @@ die Crontab-Datei.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-12-11 21:09:56 UTC
+Last updated 2024-12-11 21:31:14 UTC
 </div>
 </div>
 </body>
