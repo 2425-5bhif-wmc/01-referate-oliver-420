@@ -764,7 +764,7 @@ Andere Formate können mit der Option <code>-F</code> angegeben werden.
 <div class="listingblock">
 <div class="title">Directory-Format</div>
 <div class="content">
-<pre class="rouge highlight"><code data-lang="bash">pg_dump <span class="nt">-U</span> app <span class="nt">-h</span> localhost <span class="nt">-F</span> d <span class="nt">-f</span> backup db</code></pre>
+<pre class="rouge highlight"><code data-lang="bash">pg_dump <span class="nt">-U</span> app <span class="nt">-h</span> localhost <span class="nt">-F</span> d <span class="nt">-f</span> backup/backupDir db</code></pre>
 </div>
 </div>
 </div>
@@ -803,7 +803,7 @@ Andere Formate können mit der Option <code>-F</code> angegeben werden.
 </div>
 </div>
 <div class="paragraph">
-<p>Optionen für <code>pg_dump</code>:</p>
+<p>Optionen:</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
@@ -895,13 +895,13 @@ Andere Formate können mit der Option <code>-F</code> angegeben werden.
 <div class="listingblock">
 <div class="title">Tar-File</div>
 <div class="content">
-<pre class="rouge highlight"><code data-lang="bash">pg_restore <span class="nt">-U</span> app <span class="nt">-h</span> localhost <span class="nt">-d</span> db &lt; backup/customers.tar</code></pre>
+<pre class="rouge highlight"><code data-lang="bash">pg_restore <span class="nt">-U</span> app <span class="nt">-h</span> localhost <span class="nt">-d</span> db backup/customers.tar</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="title">Directory</div>
 <div class="content">
-<pre class="rouge highlight"><code data-lang="bash">pg_restore <span class="nt">-U</span> app <span class="nt">-h</span> localhost <span class="nt">-d</span> db backup</code></pre>
+<pre class="rouge highlight"><code data-lang="bash">pg_restore <span class="nt">-U</span> app <span class="nt">-h</span> localhost <span class="nt">-d</span> db backup/backupDir</code></pre>
 </div>
 </div>
 </div>
@@ -1002,7 +1002,7 @@ Andere Formate können mit der Option <code>-F</code> angegeben werden.
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-12-11 11:06:31 UTC
+Last updated 2024-12-11 11:17:50 UTC
 </div>
 </div>
 </body>
