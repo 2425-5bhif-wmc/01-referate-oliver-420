@@ -18,7 +18,7 @@ wichtige Informationen, die für den Betrieb unerlässlich sind. +
 Datenverlust kann schwerwiegende Folgen haben, wie z. B. finanzielle Verluste, verärgerte Kunden, etc. +
 Daher ist es wichtig, regelmäßige Backups zu erstellen, um die Datenbank vor Datenverlust zu schützen.
 
-=== Backup (SQL Dump)
+=== Backup
 Die Idee hinter einem SQL Dump ist es, eine Datei mit SQL-Befehlen zu erstellen, die, wenn sie ausgeführt wird,
 die Datenbank in den Zustand zurückversetzen, in dem sie sich zum Zeitpunkt des Backups befand. +
 Typischerweise enthält ein Backup alle oder ausgewählte Daten, Schema und Konfigurationseinstellungen die nötig sind,
@@ -102,34 +102,129 @@ Optionen für `pg_dump`:
 [%collapsible]
 ====
 
-.1) Backup einer Datenbank im SQL-Format
+.SQL-Format
 [source,bash]
 ----
-pg_dump -U app -h localhost -p 5432 db > backup/customers.sql
+pg_dump -U app -h localhost db > backup/customers.sql
 ----
 
-.2) Backup einer Datenbank im tar-Format
+.tar-Format
 [source,bash]
 ----
-pg_dump -U app -h localhost -p 5432 -F t db > backup/customers.tar
+pg_dump -U app -h localhost -F t db > backup/customers.tar
 ----
 
-.3) Backup einer Datenbank im Verzeichnisformat
+.Directory-Format
 [source,bash]
 ----
-pg_dump -U app -h localhost -p 5432 -F d -f backup db
+pg_dump -U app -h localhost -F d -f backup db
 ----
 
 ====
 
 
-Erstellt ein Backup eines kompletten PostgreSQL-Clusters mit allen Datenbanken, Schema, Rollen und
-Clusterweiten Einstellungen. +
 
 //TODO: pg_dumpall wenn ich das wirklich brauche
+// Erstellt ein Backup eines kompletten PostgreSQL-Clusters mit allen Datenbanken, Schema, Rollen und
+// Clusterweiten Einstellungen. +
 
 === Restore
-Um einen Dump (Backup) wiederherzustellen,
+Um eine PostgreSQL-Datenbank im Falle eines Datenverlusts wiederherzustellen, benutzt man die Werkzeuge `psql` oder
+`pg_restore`. +
+`psql` wird verwendet, um ein Backup-Skript im SQL-Format auszuführen, während `pg_restore` andere Formate
+(custom, tar, directory) unterstützt. +
+
+* `psql`:
+[source,bash]
+----
+psql [option] < [backup_filename]
+----
+
+* `pg_restore`:
+[source,bash]
+----
+pg_restore [option] [backup_filename]
+----
+
+Optionen für `pg_dump`:
+
+[cols="1,2", options="header"]
+|===
+| Option | Beschreibung
+
+| -U, --username=USERNAME
+| Gibt den Benutzernamen für die Verbindung zur Datenbank an.
+
+| -h, --host=HOSTNAME
+| Gibt den Hostnamen des Servers an, auf dem der PostgreSQL-Server läuft.
+
+| -p, --port=PORT
+| Gibt die Portnummer an, auf der der PostgreSQL-Server lauscht.
+
+| -d, --dbname=DBNAME
+| Gibt den Namen der Datenbank an, die exportiert werden soll.
+
+| -t, --table=TABLE
+| Gibt die Tabelle oder Tabellen an, die exportiert werden sollen. Mehrere Tabellen können durch Kommata getrennt angegeben werden.
+
+| -v, --verbose
+| Gibt detaillierte Informationen über den Wiederherstellungsprozess aus.
+
+| -c, --clean
+| Löscht die Datenbankobjekte vor dem Import.
+
+| -C, --create
+| Erstellt die Datenbank vor dem Import.
+
+| -e, --exit-on-error
+| Beendet den Wiederherstellungsprozess, wenn ein Fehler auftritt.
+
+| -F, --format=FORMAT
+| Gibt das Format des Backup-Datei an (z. B. plain (p), custom (c), directory (d), tar (t)).
+
+| -j, --jobs=NUM
+| Gibt die Anzahl der gleichzeitig ausgeführten Jobs an.
+
+| -n, --schema=SCHEMA
+| Gibt das Schema oder die Schemata an, die wiederhergestellt werden sollen.
+
+| -L, --use-list=FILENAME
+| Gibt eine Datei an, die eine Liste der Dateien enthält, die wiederhergestellt werden sollen.
+
+| -t, --tablespace=TABLESPACE
+| Gibt den Tablespace an, in dem die Tabellen wiederhergestellt werden sollen.
+
+| -V, --version
+| Gibt die Version von `pg_restore` aus.
+
+| -?, --help
+| Zeigt Hilfe und Nutzungsinformationen an.
+
+|===
+
+.Beispiele
+[%collapsible]
+====
+
+.SQL-File
+[source,bash]
+----
+psql -U app -h localhost -d db < backup/customers.sql
+----
+
+.Tar-File
+[source,bash]
+----
+pg_restore -U app -h localhost -d db < backup/customers.tar
+----
+
+.Directory
+[source,bash]
+----
+pg_restore -U app -h localhost -d db backup
+----
+
+====
 
 == Was sind Cronjobs?
 
@@ -163,8 +258,9 @@ Um einen Dump (Backup) wiederherzustellen,
 
 == Quellen
 
-https://neon.tech/postgresql/postgresql-administration/postgresql-backup-database
-https://www.postgresql.org/docs/current/backup.html
-https://www.tecmint.com/backup-and-restore-postgresql-database/
-https://www.hostinger.com/tutorials/cron-job
+* https://neon.tech/postgresql/postgresql-administration/postgresql-backup-database
+* https://www.postgresql.org/docs/current/backup.html
+* https://www.tecmint.com/backup-and-restore-postgresql-database/
+* https://www.hostinger.com/tutorials/cron-job
+* https://www.postgresql.org/docs/current/app-pgrestore.html
 
