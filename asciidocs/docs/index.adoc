@@ -117,7 +117,7 @@ pg_dump -U app -h localhost -F t db > backup/customers.tar
 .Directory-Format
 [source,bash]
 ----
-pg_dump -U app -h localhost -F d -f backup db
+pg_dump -U app -h localhost -F d -f backup/backupDir db
 ----
 
 ====
@@ -146,7 +146,7 @@ psql [option] < [backup_filename]
 pg_restore [option] [backup_filename]
 ----
 
-Optionen für `pg_dump`:
+Optionen:
 
 [cols="1,2", options="header"]
 |===
@@ -215,13 +215,13 @@ psql -U app -h localhost -d db < backup/customers.sql
 .Tar-File
 [source,bash]
 ----
-pg_restore -U app -h localhost -d db < backup/customers.tar
+pg_restore -U app -h localhost -d db backup/customers.tar
 ----
 
 .Directory
 [source,bash]
 ----
-pg_restore -U app -h localhost -d db backup
+pg_restore -U app -h localhost -d db backup/backupDir
 ----
 
 ====
