@@ -572,7 +572,7 @@ pre.rouge .gs {
 <li><a href="#_postgresql_db_backup_und_restore">1. PostgreSQL DB Backup und Restore</a>
 <ul class="sectlevel2">
 <li><a href="#_warum_überhaupt_backups">1.1. Warum überhaupt Backups?</a></li>
-<li><a href="#_backup_sql_dump">1.2. Backup (SQL Dump)</a></li>
+<li><a href="#_backup">1.2. Backup</a></li>
 <li><a href="#_restore">1.3. Restore</a></li>
 </ul>
 </li>
@@ -621,7 +621,7 @@ Daher ist es wichtig, regelmäßige Backups zu erstellen, um die Datenbank vor D
 </div>
 </div>
 <div class="sect2">
-<h3 id="_backup_sql_dump"><a class="anchor" href="#_backup_sql_dump"></a>1.2. Backup (SQL Dump)</h3>
+<h3 id="_backup"><a class="anchor" href="#_backup"></a>1.2. Backup</h3>
 <div class="paragraph">
 <p>Die Idee hinter einem SQL Dump ist es, eine Datei mit SQL-Befehlen zu erstellen, die, wenn sie ausgeführt wird,
 die Datenbank in den Zustand zurückversetzen, in dem sie sich zum Zeitpunkt des Backups befand.<br>
@@ -750,35 +750,162 @@ Andere Formate können mit der Option <code>-F</code> angegeben werden.
 <summary class="title">Beispiele</summary>
 <div class="content">
 <div class="listingblock">
-<div class="title">1) Backup einer Datenbank im SQL-Format</div>
+<div class="title">SQL-Format</div>
 <div class="content">
-<pre class="rouge highlight"><code data-lang="bash">pg_dump <span class="nt">-U</span> app <span class="nt">-h</span> localhost <span class="nt">-p</span> 5432 db <span class="o">&gt;</span> backup/customers.sql</code></pre>
+<pre class="rouge highlight"><code data-lang="bash">pg_dump <span class="nt">-U</span> app <span class="nt">-h</span> localhost db <span class="o">&gt;</span> backup/customers.sql</code></pre>
 </div>
 </div>
 <div class="listingblock">
-<div class="title">2) Backup einer Datenbank im tar-Format</div>
+<div class="title">tar-Format</div>
 <div class="content">
-<pre class="rouge highlight"><code data-lang="bash">pg_dump <span class="nt">-U</span> app <span class="nt">-h</span> localhost <span class="nt">-p</span> 5432 <span class="nt">-F</span> t db <span class="o">&gt;</span> backup/customers.tar</code></pre>
+<pre class="rouge highlight"><code data-lang="bash">pg_dump <span class="nt">-U</span> app <span class="nt">-h</span> localhost <span class="nt">-F</span> t db <span class="o">&gt;</span> backup/customers.tar</code></pre>
 </div>
 </div>
 <div class="listingblock">
-<div class="title">3) Backup einer Datenbank im Verzeichnisformat</div>
+<div class="title">Directory-Format</div>
 <div class="content">
-<pre class="rouge highlight"><code data-lang="bash">pg_dump <span class="nt">-U</span> app <span class="nt">-h</span> localhost <span class="nt">-p</span> 5432 <span class="nt">-F</span> d <span class="nt">-f</span> backup db</code></pre>
+<pre class="rouge highlight"><code data-lang="bash">pg_dump <span class="nt">-U</span> app <span class="nt">-h</span> localhost <span class="nt">-F</span> d <span class="nt">-f</span> backup db</code></pre>
 </div>
 </div>
 </div>
 </details>
-<div class="paragraph">
-<p>Erstellt ein Backup eines kompletten PostgreSQL-Clusters mit allen Datenbanken, Schema, Rollen und
-Clusterweiten Einstellungen.<br></p>
-</div>
 </div>
 <div class="sect2">
 <h3 id="_restore"><a class="anchor" href="#_restore"></a>1.3. Restore</h3>
 <div class="paragraph">
-<p>Um einen Dump (Backup) wiederherzustellen,</p>
+<p>Um eine PostgreSQL-Datenbank im Falle eines Datenverlusts wiederherzustellen, benutzt man die Werkzeuge <code>psql</code> oder
+<code>pg_restore</code>.<br>
+<code>psql</code> wird verwendet, um ein Backup-Skript im SQL-Format auszuführen, während <code>pg_restore</code> andere Formate
+(custom, tar, directory) unterstützt.<br></p>
 </div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>psql</code>:</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>psql [option] &lt; [backup_filename]</pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>pg_restore</code>:</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>pg_restore [option] [backup_filename]</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Optionen für <code>pg_dump</code>:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Option</th>
+<th class="tableblock halign-left valign-top">Beschreibung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-U, --username=USERNAME</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Gibt den Benutzernamen für die Verbindung zur Datenbank an.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-h, --host=HOSTNAME</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Gibt den Hostnamen des Servers an, auf dem der PostgreSQL-Server läuft.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-p, --port=PORT</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Gibt die Portnummer an, auf der der PostgreSQL-Server lauscht.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-d, --dbname=DBNAME</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Gibt den Namen der Datenbank an, die exportiert werden soll.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-t, --table=TABLE</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Gibt die Tabelle oder Tabellen an, die exportiert werden sollen. Mehrere Tabellen können durch Kommata getrennt angegeben werden.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-v, --verbose</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Gibt detaillierte Informationen über den Wiederherstellungsprozess aus.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-c, --clean</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Löscht die Datenbankobjekte vor dem Import.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-C, --create</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Erstellt die Datenbank vor dem Import.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-e, --exit-on-error</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Beendet den Wiederherstellungsprozess, wenn ein Fehler auftritt.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-F, --format=FORMAT</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Gibt das Format des Backup-Datei an (z. B. plain (p), custom (c), directory (d), tar (t)).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-j, --jobs=NUM</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Gibt die Anzahl der gleichzeitig ausgeführten Jobs an.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-n, --schema=SCHEMA</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Gibt das Schema oder die Schemata an, die wiederhergestellt werden sollen.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-L, --use-list=FILENAME</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Gibt eine Datei an, die eine Liste der Dateien enthält, die wiederhergestellt werden sollen.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-t, --tablespace=TABLESPACE</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Gibt den Tablespace an, in dem die Tabellen wiederhergestellt werden sollen.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-V, --version</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Gibt die Version von <code>pg_restore</code> aus.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-?, --help</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Zeigt Hilfe und Nutzungsinformationen an.</p></td>
+</tr>
+</tbody>
+</table>
+<details>
+<summary class="title">Beispiele</summary>
+<div class="content">
+<div class="listingblock">
+<div class="title">SQL-File</div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="bash">psql <span class="nt">-U</span> app <span class="nt">-h</span> localhost <span class="nt">-d</span> db &lt; backup/customers.sql</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Tar-File</div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="bash">pg_restore <span class="nt">-U</span> app <span class="nt">-h</span> localhost <span class="nt">-d</span> db &lt; backup/customers.tar</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Directory</div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="bash">pg_restore <span class="nt">-U</span> app <span class="nt">-h</span> localhost <span class="nt">-d</span> db backup</code></pre>
+</div>
+</div>
+</div>
+</details>
 </div>
 </div>
 </div>
@@ -851,18 +978,31 @@ Clusterweiten Einstellungen.<br></p>
 <div class="sect1">
 <h2 id="_quellen"><a class="anchor" href="#_quellen"></a>7. Quellen</h2>
 <div class="sectionbody">
-<div class="paragraph">
-<p><a href="https://neon.tech/postgresql/postgresql-administration/postgresql-backup-database" class="bare">https://neon.tech/postgresql/postgresql-administration/postgresql-backup-database</a>
-<a href="https://www.postgresql.org/docs/current/backup.html" class="bare">https://www.postgresql.org/docs/current/backup.html</a>
-<a href="https://www.tecmint.com/backup-and-restore-postgresql-database/" class="bare">https://www.tecmint.com/backup-and-restore-postgresql-database/</a>
-<a href="https://www.hostinger.com/tutorials/cron-job" class="bare">https://www.hostinger.com/tutorials/cron-job</a></p>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://neon.tech/postgresql/postgresql-administration/postgresql-backup-database" class="bare">https://neon.tech/postgresql/postgresql-administration/postgresql-backup-database</a></p>
+</li>
+<li>
+<p><a href="https://www.postgresql.org/docs/current/backup.html" class="bare">https://www.postgresql.org/docs/current/backup.html</a></p>
+</li>
+<li>
+<p><a href="https://www.tecmint.com/backup-and-restore-postgresql-database/" class="bare">https://www.tecmint.com/backup-and-restore-postgresql-database/</a></p>
+</li>
+<li>
+<p><a href="https://www.hostinger.com/tutorials/cron-job" class="bare">https://www.hostinger.com/tutorials/cron-job</a></p>
+</li>
+<li>
+<p><a href="https://www.postgresql.org/docs/current/app-pgrestore.html" class="bare">https://www.postgresql.org/docs/current/app-pgrestore.html</a></p>
+</li>
+</ul>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-12-11 08:40:11 UTC
+Last updated 2024-12-11 11:06:31 UTC
 </div>
 </div>
 </body>
