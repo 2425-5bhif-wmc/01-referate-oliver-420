@@ -218,7 +218,6 @@ pg_restore -U app -h localhost -d db backup/customers.tar
 ----
 pg_restore -U app -h localhost -d db backup/backupDir
 ----
-
 ====
 
 == Cron jobs
@@ -252,6 +251,8 @@ die Crontab-Datei.
 Cron-Jobs sind das A&O für die Automatisierung von Aufgaben, jedoch gibt es neben den
 zahlreichen Vorteilen auch einige Nachteile.
 
+:!sectnums:
+
 ==== Vorteile
 
 * Automatisierung
@@ -279,6 +280,8 @@ zahlreichen Vorteilen auch einige Nachteile.
 
 * Skalierbarkeit
 ** Bei vielen Aufgaben kann die Verwaltung und Überwachung von Cron-Jobs schwierig werden.
+
+:sectnums:
 
 === Typische Anwendungsfälle
 
