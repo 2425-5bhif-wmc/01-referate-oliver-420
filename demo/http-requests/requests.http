@@ -1,0 +1,37 @@
+### POST: Neuen Kunden hinzufügen
+POST http://localhost:8080/customers
+Content-Type: application/json
+
+{
+  "name": "Alice",
+  "email": "alice@example.com"
+}
+
+### POST: Einen weiteren Kunden hinzufügen
+POST http://localhost:8080/customers
+Content-Type: application/json
+
+{
+  "name": "Bob",
+  "email": "bob@example.com"
+}
+
+### GET: Alle Kunden abrufen
+GET http://localhost:8080/customers
+Accept: application/json
+
+### Optional: PUT oder PATCH für Kunden aktualisieren (falls du es hinzufügst)
+PUT http://localhost:8080/customers/1
+Content-Type: application/json
+
+ {
+     "name": "Alice Bob",
+     "email": "alice.smith@example.com"
+ }
+
+### DELETE: Kunde mit einer bestimmten ID löschen (z.B. ID = 1)
+DELETE http://localhost:8080/customers/1
+
+### GET: Einen Kunden über die Id bekommen
+GET http://localhost:8080/customers/2
+Content-Type: */*

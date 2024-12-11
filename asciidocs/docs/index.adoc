@@ -1,4 +1,170 @@
-= Index page
+= Cron Jobs: Automated Backups for PostgreSQL
+Daxinger Oliver
+{docdate}
 ifndef::imagesdir[:imagesdir: images]
+ifndef::backend[:backend: html5]
+:icons: font
+:sectnums:
+:toc: left
+:source-highlighter: rouge
+:docinfo: shared
 
-image::img.png[]
+== PostgreSQL DB Backup und Restore
+
+=== Warum überhaupt Backups?
+
+Datenbanken sind einer der wichtigsten Bestandteile verschiedenster Anwendungen, sie speichern
+wichtige Informationen, die für den Betrieb unerlässlich sind. +
+Datenverlust kann schwerwiegende Folgen haben, wie z. B. finanzielle Verluste, verärgerte Kunden, etc. +
+Daher ist es wichtig, regelmäßige Backups zu erstellen, um die Datenbank vor Datenverlust zu schützen.
+
+=== Backup (SQL Dump)
+Die Idee hinter einem SQL Dump ist es, eine Datei mit SQL-Befehlen zu erstellen, die, wenn sie ausgeführt wird,
+die Datenbank in den Zustand zurückversetzen, in dem sie sich zum Zeitpunkt des Backups befand. +
+Typischerweise enthält ein Backup alle oder ausgewählte Daten, Schema und Konfigurationseinstellungen die nötig sind,
+um die Datenbank wiederherzustellen. +
+Hierfür werden Utility Programs wie `pg_dump` und `pg_dumpall` verwendet:
+
+* `pg_dump`:
+
+Holt die Daten aus einer Datenbank und schreibt sie in ein Skript oder ein Archiv. +
+Die Datei repräsentiert den snapshot (Schnappschuss) der Datenbank zur Zeit, an dem der Befehl ausgeführt wird. +
+
+Syntax:
+
+[source,bash]
+----
+pg_dump [option] [dbname] > [output_filename]
+----
+
+NOTE: Standardmäßig ist das Ausgabeformat von `pg_dump` ein SQL-Skript. +
+Andere Formate können mit der Option `-F` angegeben werden.
+
+Optionen für `pg_dump`:
+
+[cols="1,2", options="header"]
+|===
+| Option | Beschreibung
+
+| -U, --username=USERNAME
+| Gibt den Benutzernamen für die Verbindung zur Datenbank an.
+
+| -h, --host=HOSTNAME
+| Gibt den Hostnamen des Servers an, auf dem der PostgreSQL-Server läuft.
+
+| -p, --port=PORT
+| Gibt die Portnummer an, auf der der PostgreSQL-Server lauscht.
+
+| -d, --dbname=DBNAME
+| Gibt den Namen der Datenbank an, die exportiert werden soll.
+
+| -n, --schema=SCHEMA
+| Gibt das Schema oder die Schemata an, die exportiert werden sollen. Mehrere Schemata können durch Kommata getrennt angegeben werden.
+
+| -t, --table=TABLE
+| Gibt die Tabelle oder Tabellen an, die exportiert werden sollen. Mehrere Tabellen können durch Kommata getrennt angegeben werden.
+
+| -F, --format=FORMAT
+| Gibt das Ausgabeformat an (z. B. plain (p), custom (c), directory (d)).
+
+| -f, --file=FILENAME
+| Gibt den Namen der Ausgabedatei an.
+
+| -W, --password
+| Erzwingt eine Passwortabfrage für die Verbindung zum PostgreSQL-Server.
+
+| -w, --no-password
+| Unterdrückt die Passwortabfrage, wenn das Passwort auf andere Weise bereitgestellt wird (z. B. `.pgpass`-Datei).
+
+| -c, --clean
+| Fügt SQL-Befehle hinzu, um die Datenbankobjekte vor dem Import zu löschen.
+
+| -C, --create
+| Fügt SQL-Befehle hinzu, um die Datenbank vor dem Import zu erstellen.
+
+| -a, --data-only
+| Exportiert nur die Daten, nicht die Schemas.
+
+| -s, --schema-only
+| Exportiert nur die Schemas, nicht die Daten.
+
+| -x, --no-privileges
+| Schließt Berechtigungen (GRANT/REVOKE-Befehle) aus dem Dump aus.
+
+| -X, --no-owner
+| Verhindert den Export von Objektbesitzinformationen (z. B. `OWNER TO`).
+
+| --help
+| Zeigt Hilfe und Nutzungsinformationen an.
+|===
+
+.Beispiele
+[%collapsible]
+====
+
+.1) Backup einer Datenbank im SQL-Format
+[source,bash]
+----
+pg_dump -U app -h localhost -p 5432 db > backup/customers.sql
+----
+
+.2) Backup einer Datenbank im tar-Format
+[source,bash]
+----
+pg_dump -U app -h localhost -p 5432 -F t db > backup/customers.tar
+----
+
+.3) Backup einer Datenbank im Verzeichnisformat
+[source,bash]
+----
+pg_dump -U app -h localhost -p 5432 -F d -f backup db
+----
+
+====
+
+
+Erstellt ein Backup eines kompletten PostgreSQL-Clusters mit allen Datenbanken, Schema, Rollen und
+Clusterweiten Einstellungen. +
+
+//TODO: pg_dumpall wenn ich das wirklich brauche
+
+=== Restore
+Um einen Dump (Backup) wiederherzustellen,
+
+== Was sind Cronjobs?
+
+=== Definition
+
+=== Typische Anwendungsfälle
+
+=== Vorteile & Nachteile
+
+== Aufbau und Funktionsweise
+
+=== Cronjob Syntax
+
+=== Zeitangaben
+
+=== Beispiele
+
+== Cronjobs und PostgreSQL
+
+=== Warum automatisierte Backups?
+
+=== Backup-Strategien
+
+== Automatisierte Backups mit Cronjobs
+
+=== Einrichtung eines Cronjobs
+
+=== Beispiel: Tägliches Backup
+
+== Zusammenfassung
+
+== Quellen
+
+https://neon.tech/postgresql/postgresql-administration/postgresql-backup-database
+https://www.postgresql.org/docs/current/backup.html
+https://www.tecmint.com/backup-and-restore-postgresql-database/
+https://www.hostinger.com/tutorials/cron-job
+
