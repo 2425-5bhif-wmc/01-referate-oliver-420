@@ -576,34 +576,30 @@ pre.rouge .gs {
 <li><a href="#_restore">1.3. Restore</a></li>
 </ul>
 </li>
-<li><a href="#_was_sind_cronjobs">2. Was sind Cronjobs?</a>
+<li><a href="#_cron_jobs">2. Cron jobs</a>
 <ul class="sectlevel2">
 <li><a href="#_definition">2.1. Definition</a></li>
 <li><a href="#_typische_anwendungsfälle">2.2. Typische Anwendungsfälle</a></li>
 <li><a href="#_vorteile_nachteile">2.3. Vorteile &amp; Nachteile</a></li>
+<li><a href="#_funktionsweise">2.4. Funktionsweise</a></li>
+<li><a href="#_cronjob_syntax">2.5. Cronjob Syntax</a></li>
+<li><a href="#_beispiele">2.6. Beispiele</a></li>
 </ul>
 </li>
-<li><a href="#_aufbau_und_funktionsweise">3. Aufbau und Funktionsweise</a>
+<li><a href="#_cronjobs_und_postgresql">3. Cronjobs und PostgreSQL</a>
 <ul class="sectlevel2">
-<li><a href="#_cronjob_syntax">3.1. Cronjob Syntax</a></li>
-<li><a href="#_zeitangaben">3.2. Zeitangaben</a></li>
-<li><a href="#_beispiele">3.3. Beispiele</a></li>
+<li><a href="#_warum_automatisierte_backups">3.1. Warum automatisierte Backups?</a></li>
+<li><a href="#_backup_strategien">3.2. Backup-Strategien</a></li>
 </ul>
 </li>
-<li><a href="#_cronjobs_und_postgresql">4. Cronjobs und PostgreSQL</a>
+<li><a href="#_automatisierte_backups_mit_cronjobs">4. Automatisierte Backups mit Cronjobs</a>
 <ul class="sectlevel2">
-<li><a href="#_warum_automatisierte_backups">4.1. Warum automatisierte Backups?</a></li>
-<li><a href="#_backup_strategien">4.2. Backup-Strategien</a></li>
+<li><a href="#_einrichtung_eines_cronjobs">4.1. Einrichtung eines Cronjobs</a></li>
+<li><a href="#_beispiel_tägliches_backup">4.2. Beispiel: Tägliches Backup</a></li>
 </ul>
 </li>
-<li><a href="#_automatisierte_backups_mit_cronjobs">5. Automatisierte Backups mit Cronjobs</a>
-<ul class="sectlevel2">
-<li><a href="#_einrichtung_eines_cronjobs">5.1. Einrichtung eines Cronjobs</a></li>
-<li><a href="#_beispiel_tägliches_backup">5.2. Beispiel: Tägliches Backup</a></li>
-</ul>
-</li>
-<li><a href="#_zusammenfassung">6. Zusammenfassung</a></li>
-<li><a href="#_quellen">7. Quellen</a></li>
+<li><a href="#_zusammenfassung">5. Zusammenfassung</a></li>
+<li><a href="#_quellen">6. Quellen</a></li>
 </ul>
 </div>
 </div>
@@ -910,73 +906,268 @@ Andere Formate können mit der Option <code>-F</code> angegeben werden.
 </div>
 </div>
 <div class="sect1">
-<h2 id="_was_sind_cronjobs"><a class="anchor" href="#_was_sind_cronjobs"></a>2. Was sind Cronjobs?</h2>
+<h2 id="_cron_jobs"><a class="anchor" href="#_cron_jobs"></a>2. Cron jobs</h2>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_definition"><a class="anchor" href="#_definition"></a>2.1. Definition</h3>
-
+<div class="paragraph">
+<p>Cron-Jobs sind zeitgesteuerte Aufgaben, die auf Unix- oder Linux-Systemen im Hintergrund automatisch ausgeführt werden.
+Sie werden über den Cron-Dienst verwaltet und können so konfiguriert werden, dass sie Skripte, Befehle oder Programme
+zu bestimmten Zeitpunkten oder in festgelegten Intervallen ausführen. Die Konfiguration erfolgt üblicherweise über
+die Crontab-Datei.</p>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_typische_anwendungsfälle"><a class="anchor" href="#_typische_anwendungsfälle"></a>2.2. Typische Anwendungsfälle</h3>
-
+<div class="ulist">
+<ul>
+<li>
+<p>Automatisierte Backups</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Regelmäßiges Sichern von Datenbanken, Dateien oder Servern.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Systemwartung</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Aufgaben wie das Leeren von temporären Dateien, das Rotieren von Logs oder das Aktualisieren von Paketen.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Datenverarbeitung</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Verarbeitung oder Synchronisierung von Daten wie das Abrufen von APIs, das Erstellen von Log-Daten oder das Generieren von Berichten.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Benachrichtigungen</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Versenden von Erinnerungen, Alerts oder Zusammenfassungen.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_vorteile_nachteile"><a class="anchor" href="#_vorteile_nachteile"></a>2.3. Vorteile &amp; Nachteile</h3>
+<div class="sect3">
+<h4 id="_vorteile"><a class="anchor" href="#_vorteile"></a>2.3.1. Vorteile</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>Automatisierung</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Wiederkehrende Aufgaben können ohne manuellen Eingriff erledigt werden.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Flexibilität</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Feine Zeitsteuerung für beliebige Zeitpläne.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Effizienz</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Spart Zeit und reduziert die Wahrscheinlichkeit von menschlichen Fehlern.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Einfachheit</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Minimaler Ressourcenverbrauch und einfache Konfiguration.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_nachteile"><a class="anchor" href="#_nachteile"></a>2.3.2. Nachteile</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>Komplexität bei Fehlern</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Fehler bei der Konfiguration (z. B. falsche Zeitangaben) sind schwer zu fixen.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Limitierte Logging-Funktionalität</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Ohne spezielle Vorkehrungen sind Cron-Jobs schwer zu überwachen.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Sicherheitsrisiken</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Unvorsichtige Konfiguration kann Sicherheitslücken öffnen.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Skalierbarkeit</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Bei vielen Aufgaben kann die Verwaltung und Überwachung von Cron-Jobs schwierig werden.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_funktionsweise"><a class="anchor" href="#_funktionsweise"></a>2.4. Funktionsweise</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Cron-Dienst</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Ein Cron-Daemon läuft die ganze Zeit im Hintergrund und überwacht die Crontab-Dateien aller Benutzer.</p>
+</li>
+<li>
+<p>Dieser Daemon führt die definierten Aufgaben zum gegebenen Zeitplan aus.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Crontab-Dateien</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Diese Dateien sind die 'Konfiguration' für Cron-Jobs.</p>
+</li>
+<li>
+<p>Jeder Benutzer hat eine Crontab-Datei, in der die einzelnen Aufgaben definiert werden.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Zeitangaben</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Die verwendete Zeit von Cron ist die des Systems, auf dem es läuft.</p>
+</li>
+<li>
+<p>Cron überprüft minütlich, ob eine Aufgabe ausgeführt werden muss.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Ausführung</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Befehle oder Skripts werden zur festgelegten Zeit oder in festgelegten Intervallen ausgeführt.</p>
+</li>
+<li>
+<p>Die Ausgabe kann man in einer Log-Datei speichern oder per E-Mail versenden, sofern konfiguriert.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_cronjob_syntax"><a class="anchor" href="#_cronjob_syntax"></a>2.5. Cronjob Syntax</h3>
+<div class="imageblock">
+<div class="content">
+<img src="images/images/cron_syntax.png" alt="cron syntax">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_beispiele"><a class="anchor" href="#_beispiele"></a>2.6. Beispiele</h3>
 
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_aufbau_und_funktionsweise"><a class="anchor" href="#_aufbau_und_funktionsweise"></a>3. Aufbau und Funktionsweise</h2>
+<h2 id="_cronjobs_und_postgresql"><a class="anchor" href="#_cronjobs_und_postgresql"></a>3. Cronjobs und PostgreSQL</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_cronjob_syntax"><a class="anchor" href="#_cronjob_syntax"></a>3.1. Cronjob Syntax</h3>
+<h3 id="_warum_automatisierte_backups"><a class="anchor" href="#_warum_automatisierte_backups"></a>3.1. Warum automatisierte Backups?</h3>
 
 </div>
 <div class="sect2">
-<h3 id="_zeitangaben"><a class="anchor" href="#_zeitangaben"></a>3.2. Zeitangaben</h3>
-
-</div>
-<div class="sect2">
-<h3 id="_beispiele"><a class="anchor" href="#_beispiele"></a>3.3. Beispiele</h3>
+<h3 id="_backup_strategien"><a class="anchor" href="#_backup_strategien"></a>3.2. Backup-Strategien</h3>
 
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_cronjobs_und_postgresql"><a class="anchor" href="#_cronjobs_und_postgresql"></a>4. Cronjobs und PostgreSQL</h2>
+<h2 id="_automatisierte_backups_mit_cronjobs"><a class="anchor" href="#_automatisierte_backups_mit_cronjobs"></a>4. Automatisierte Backups mit Cronjobs</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_warum_automatisierte_backups"><a class="anchor" href="#_warum_automatisierte_backups"></a>4.1. Warum automatisierte Backups?</h3>
+<h3 id="_einrichtung_eines_cronjobs"><a class="anchor" href="#_einrichtung_eines_cronjobs"></a>4.1. Einrichtung eines Cronjobs</h3>
 
 </div>
 <div class="sect2">
-<h3 id="_backup_strategien"><a class="anchor" href="#_backup_strategien"></a>4.2. Backup-Strategien</h3>
+<h3 id="_beispiel_tägliches_backup"><a class="anchor" href="#_beispiel_tägliches_backup"></a>4.2. Beispiel: Tägliches Backup</h3>
 
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_automatisierte_backups_mit_cronjobs"><a class="anchor" href="#_automatisierte_backups_mit_cronjobs"></a>5. Automatisierte Backups mit Cronjobs</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_einrichtung_eines_cronjobs"><a class="anchor" href="#_einrichtung_eines_cronjobs"></a>5.1. Einrichtung eines Cronjobs</h3>
-
-</div>
-<div class="sect2">
-<h3 id="_beispiel_tägliches_backup"><a class="anchor" href="#_beispiel_tägliches_backup"></a>5.2. Beispiel: Tägliches Backup</h3>
-
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_zusammenfassung"><a class="anchor" href="#_zusammenfassung"></a>6. Zusammenfassung</h2>
+<h2 id="_zusammenfassung"><a class="anchor" href="#_zusammenfassung"></a>5. Zusammenfassung</h2>
 <div class="sectionbody">
 
 </div>
 </div>
 <div class="sect1">
-<h2 id="_quellen"><a class="anchor" href="#_quellen"></a>7. Quellen</h2>
+<h2 id="_quellen"><a class="anchor" href="#_quellen"></a>6. Quellen</h2>
 <div class="sectionbody">
 <div class="ulist">
 <ul>
@@ -1002,7 +1193,7 @@ Andere Formate können mit der Option <code>-F</code> angegeben werden.
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-12-11 11:17:50 UTC
+Last updated 2024-12-11 21:09:56 UTC
 </div>
 </div>
 </body>
