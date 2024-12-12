@@ -35,3 +35,7 @@ DELETE http://localhost:8080/customers/1
 ### GET: Einen Kunden über die Id bekommen
 GET http://localhost:8080/customers/2
 Content-Type: */*
+
+### GET: Alle Kunden abrufen
+GET http://10.244.0.14/customers
+Accept: application/json

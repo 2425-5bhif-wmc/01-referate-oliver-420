@@ -363,4 +363,5 @@ Zusätzlich zur Syntax gibt es auch verschiedene Operatoren, die verwendet werde
 * https://www.tecmint.com/backup-and-restore-postgresql-database/
 * https://www.hostinger.com/tutorials/cron-job
 * https://www.postgresql.org/docs/current/app-pgrestore.html
-
+* https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/
+* Luka
