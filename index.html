@@ -564,7 +564,7 @@ pre.rouge .gs {
 <h1>Cron Jobs: Automated Backups for PostgreSQL</h1>
 <div class="details">
 <span id="author" class="author">Daxinger Oliver</span><br>
-<span id="revdate">2024-12-11</span>
+<span id="revdate">2024-12-12</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -597,8 +597,7 @@ pre.rouge .gs {
 <li><a href="#_beispiel_tägliches_backup">4.2. Beispiel: Tägliches Backup</a></li>
 </ul>
 </li>
-<li><a href="#_zusammenfassung">5. Zusammenfassung</a></li>
-<li><a href="#_quellen">6. Quellen</a></li>
+<li><a href="#_quellen">5. Quellen</a></li>
 </ul>
 </div>
 </div>
@@ -1131,6 +1130,62 @@ zahlreichen Vorteilen auch einige Nachteile.</p>
 <div class="paragraph">
 <p><span class="image"><img src="images/cron_syntax.png" alt="cron syntax"></span></p>
 </div>
+<div class="paragraph">
+<p>Zusätzlich zur Syntax gibt es auch verschiedene Operatoren, die verwendet werden können:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Operator</th>
+<th class="tableblock halign-left valign-top">Beschreibung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>*</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Jeder Wert (z. B. <code>* * * * *</code><br>
+&#8594; jede Minute)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>,</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Mehrere Werte (z. B. <code>0,30 * * * *</code><br>
+&#8594; jede halbe Stunde)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Wertebereich (z. B. 6-12 im Monatsfeld<br>
+&#8594; Juni-Dezember)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>/</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Schrittweite (z. B. <code>*/5 * * * *</code><br>
+&#8594; alle 5 Minuten)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>L</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Letzte/r &#8230;&#8203; (z. B. <code>L</code> im Tag des Monats<br>
+&#8594; letzter Tag des Monats)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>W</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Wochentag (z. B. <code>0W</code> im Tag des Monats<br>
+&#8594; erster Sonntag des Monats)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>#</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Operator für einen bestimmten Tag im Monat (z. B. <code>1#2</code> im  Tag-der-Woche Feld<br>
+&#8594; zweiter Montag im Monat)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>?</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Keine spezifischen Werte für Tag des Monats oder Tag der Woche</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 </div>
@@ -1161,13 +1216,7 @@ zahlreichen Vorteilen auch einige Nachteile.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_zusammenfassung"><a class="anchor" href="#_zusammenfassung"></a>5. Zusammenfassung</h2>
-<div class="sectionbody">
-
-</div>
-</div>
-<div class="sect1">
-<h2 id="_quellen"><a class="anchor" href="#_quellen"></a>6. Quellen</h2>
+<h2 id="_quellen"><a class="anchor" href="#_quellen"></a>5. Quellen</h2>
 <div class="sectionbody">
 <div class="ulist">
 <ul>
@@ -1193,7 +1242,7 @@ zahlreichen Vorteilen auch einige Nachteile.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-12-11 21:37:51 UTC
+Last updated 2024-12-12 15:31:54 UTC
 </div>
 </div>
 </body>
