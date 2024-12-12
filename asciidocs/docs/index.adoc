@@ -305,6 +305,45 @@ Cron Jobs werden beinahe überall eingesetzt, wo regelmäßige oder zeitgesteuer
 ifdef::backend-html5,backend-revealjs[image:cron_syntax.png[]]
 ifdef::backend-pdf[image:cron_syntax.png[]]
 
+Zusätzlich zur Syntax gibt es auch verschiedene Operatoren, die verwendet werden können:
+
+|===
+|Operator | Beschreibung
+
+| `*`
+| Jeder Wert (z. B. `* * * * *` +
+-> jede Minute)
+
+| `,`
+| Mehrere Werte (z. B. `0,30 * * * *` +
+-> jede halbe Stunde)
+
+| `-`
+| Wertebereich (z. B. 6-12 im Monatsfeld +
+-> Juni-Dezember)
+
+| `/`
+| Schrittweite (z. B. `*/5 * * * *` +
+-> alle 5 Minuten)
+
+| `L`
+| Letzte/r ... (z. B. `L` im Tag des Monats +
+-> letzter Tag des Monats)
+
+| `W`
+| Wochentag (z. B. `0W` im Tag des Monats +
+-> erster Sonntag des Monats)
+
+| `#`
+| Operator für einen bestimmten Tag im Monat (z. B. `1#2` im  Tag-der-Woche Feld +
+-> zweiter Montag im Monat)
+
+| `?`
+| Keine spezifischen Werte für Tag des Monats oder Tag der Woche
+|===
+
+
+
 == Cronjobs und PostgreSQL
 
 === Warum automatisierte Backups?
@@ -316,8 +355,6 @@ ifdef::backend-pdf[image:cron_syntax.png[]]
 === Einrichtung eines Cronjobs
 
 === Beispiel: Tägliches Backup
-
-== Zusammenfassung
 
 == Quellen
 
