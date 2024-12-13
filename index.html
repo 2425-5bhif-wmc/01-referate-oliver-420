@@ -564,7 +564,7 @@ pre.rouge .gs {
 <h1>Cron Jobs: Automated Backups for PostgreSQL</h1>
 <div class="details">
 <span id="author" class="author">Daxinger Oliver</span><br>
-<span id="revdate">2024-12-12</span>
+<span id="revdate">2024-12-13</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -591,12 +591,7 @@ pre.rouge .gs {
 <li><a href="#_backup_strategien">3.2. Backup-Strategien</a></li>
 </ul>
 </li>
-<li><a href="#_automatisierte_backups_mit_cronjobs">4. Automatisierte Backups mit Cronjobs</a>
-<ul class="sectlevel2">
-<li><a href="#_einrichtung_eines_cronjobs">4.1. Einrichtung eines Cronjobs</a></li>
-<li><a href="#_beispiel_tägliches_backup">4.2. Beispiel: Tägliches Backup</a></li>
-</ul>
-</li>
+<li><a href="#_cronjob_beispiel_in_kubernetes">4. Cronjob Beispiel in Kubernetes</a></li>
 <li><a href="#_quellen">5. Quellen</a></li>
 </ul>
 </div>
@@ -621,7 +616,7 @@ Daher ist es wichtig, regelmäßige Backups zu erstellen, um die Datenbank vor D
 die Datenbank in den Zustand zurückversetzen, in dem sie sich zum Zeitpunkt des Backups befand.<br>
 Typischerweise enthält ein Backup alle oder ausgewählte Daten, Schema und Konfigurationseinstellungen die nötig sind,
 um die Datenbank wiederherzustellen.<br>
-Hierfür werden Utility Programs wie <code>pg_dump</code> und <code>pg_dumpall</code> verwendet:</p>
+Hierfür werden Utility Programs wie <code>pg_dump</code> verwendet:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -900,6 +895,97 @@ Andere Formate können mit der Option <code>-F</code> angegeben werden.
 </div>
 </div>
 </details>
+<div class="listingblock">
+<div class="title">Beispiel wie ein Backup aussieht (SQL)</div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="sql"><span class="c1">--</span>
+<span class="c1">-- PostgreSQL database dump</span>
+<span class="c1">--</span>
+
+<span class="c1">-- Dumped from database version 15.8 (Debian 15.8-1.pgdg120+1)</span>
+<span class="c1">-- Dumped by pg_dump version 17.2</span>
+
+<span class="k">SET</span> <span class="n">statement_timeout</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="k">SET</span> <span class="n">lock_timeout</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="k">SET</span> <span class="n">idle_in_transaction_session_timeout</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="k">SET</span> <span class="n">transaction_timeout</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="k">SET</span> <span class="n">client_encoding</span> <span class="o">=</span> <span class="s1">'UTF8'</span><span class="p">;</span>
+<span class="k">SET</span> <span class="n">standard_conforming_strings</span> <span class="o">=</span> <span class="k">on</span><span class="p">;</span>
+<span class="k">SELECT</span> <span class="n">pg_catalog</span><span class="p">.</span><span class="n">set_config</span><span class="p">(</span><span class="s1">'search_path'</span><span class="p">,</span> <span class="s1">''</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
+<span class="k">SET</span> <span class="n">check_function_bodies</span> <span class="o">=</span> <span class="k">false</span><span class="p">;</span>
+<span class="k">SET</span> <span class="n">xmloption</span> <span class="o">=</span> <span class="n">content</span><span class="p">;</span>
+<span class="k">SET</span> <span class="n">client_min_messages</span> <span class="o">=</span> <span class="n">warning</span><span class="p">;</span>
+<span class="k">SET</span> <span class="n">row_security</span> <span class="o">=</span> <span class="k">off</span><span class="p">;</span>
+
+<span class="k">SET</span> <span class="n">default_tablespace</span> <span class="o">=</span> <span class="s1">''</span><span class="p">;</span>
+
+<span class="k">SET</span> <span class="n">default_table_access_method</span> <span class="o">=</span> <span class="n">heap</span><span class="p">;</span>
+
+<span class="c1">--</span>
+<span class="c1">-- Name: customer; Type: TABLE; Schema: public; Owner: app</span>
+<span class="c1">--</span>
+
+<span class="k">CREATE</span> <span class="k">TABLE</span> <span class="k">public</span><span class="p">.</span><span class="n">customer</span> <span class="p">(</span>
+    <span class="n">id</span> <span class="nb">bigint</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+    <span class="n">email</span> <span class="nb">character</span> <span class="nb">varying</span><span class="p">(</span><span class="mi">255</span><span class="p">),</span>
+    <span class="n">name</span> <span class="nb">character</span> <span class="nb">varying</span><span class="p">(</span><span class="mi">255</span><span class="p">)</span>
+<span class="p">);</span>
+
+
+<span class="k">ALTER</span> <span class="k">TABLE</span> <span class="k">public</span><span class="p">.</span><span class="n">customer</span> <span class="k">OWNER</span> <span class="k">TO</span> <span class="n">app</span><span class="p">;</span>
+
+<span class="c1">--</span>
+<span class="c1">-- Name: customer_id_seq; Type: SEQUENCE; Schema: public; Owner: app</span>
+<span class="c1">--</span>
+
+<span class="k">ALTER</span> <span class="k">TABLE</span> <span class="k">public</span><span class="p">.</span><span class="n">customer</span> <span class="k">ALTER</span> <span class="k">COLUMN</span> <span class="n">id</span> <span class="k">ADD</span> <span class="k">GENERATED</span> <span class="k">BY</span> <span class="k">DEFAULT</span> <span class="k">AS</span> <span class="k">IDENTITY</span> <span class="p">(</span>
+    <span class="n">SEQUENCE</span> <span class="n">NAME</span> <span class="k">public</span><span class="p">.</span><span class="n">customer_id_seq</span>
+    <span class="k">START</span> <span class="k">WITH</span> <span class="mi">1</span>
+    <span class="k">INCREMENT</span> <span class="k">BY</span> <span class="mi">1</span>
+    <span class="k">NO</span> <span class="k">MINVALUE</span>
+    <span class="k">NO</span> <span class="k">MAXVALUE</span>
+    <span class="k">CACHE</span> <span class="mi">1</span>
+<span class="p">);</span>
+
+
+<span class="c1">--</span>
+<span class="c1">-- Data for Name: customer; Type: TABLE DATA; Schema: public; Owner: app</span>
+<span class="c1">--</span>
+
+<span class="k">COPY</span> <span class="k">public</span><span class="p">.</span><span class="n">customer</span> <span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">email</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span> <span class="k">FROM</span> <span class="k">stdin</span><span class="p">;</span>
+<span class="mi">1</span>       <span class="n">john</span><span class="p">.</span><span class="n">doe</span><span class="o">@</span><span class="n">example</span><span class="p">.</span><span class="n">com</span>    <span class="n">Doe</span> <span class="n">John</span>
+<span class="mi">2</span>       <span class="n">jane</span><span class="p">.</span><span class="n">doe</span><span class="o">@</span><span class="n">example</span><span class="p">.</span><span class="n">com</span>    <span class="n">Doe</span> <span class="n">Jane</span>
+<span class="mi">3</span>       <span class="n">alice</span><span class="p">.</span><span class="n">smith</span><span class="o">@</span><span class="n">example</span><span class="p">.</span><span class="n">com</span> <span class="n">Smith</span> <span class="n">Alice</span>
+<span class="mi">4</span>       <span class="n">bob</span><span class="p">.</span><span class="n">jones</span><span class="o">@</span><span class="n">example</span><span class="p">.</span><span class="n">com</span>   <span class="n">Jones</span> <span class="n">Bob</span>
+<span class="mi">5</span>       <span class="n">charlie</span><span class="p">.</span><span class="n">brown</span><span class="o">@</span><span class="n">example</span><span class="p">.</span><span class="n">com</span>       <span class="n">Brown</span> <span class="n">Charlie</span>
+<span class="mi">6</span>       <span class="n">emily</span><span class="p">.</span><span class="n">clark</span><span class="o">@</span><span class="n">example</span><span class="p">.</span><span class="n">com</span> <span class="n">Clark</span> <span class="n">Emily</span>
+<span class="mi">7</span>       <span class="n">michael</span><span class="p">.</span><span class="n">king</span><span class="o">@</span><span class="n">example</span><span class="p">.</span><span class="n">com</span>        <span class="n">King</span> <span class="n">Michael</span>
+<span class="mi">8</span>       <span class="n">sarah</span><span class="p">.</span><span class="n">lee</span><span class="o">@</span><span class="n">example</span><span class="p">.</span><span class="n">com</span>   <span class="n">Lee</span> <span class="n">Sarah</span>
+<span class="mi">9</span>       <span class="n">david</span><span class="p">.</span><span class="n">taylor</span><span class="o">@</span><span class="n">example</span><span class="p">.</span><span class="n">com</span>        <span class="n">Taylor</span> <span class="n">David</span>
+<span class="mi">10</span>      <span class="n">laura</span><span class="p">.</span><span class="n">martin</span><span class="o">@</span><span class="n">example</span><span class="p">.</span><span class="n">com</span>        <span class="n">Martin</span> <span class="n">Laura</span>
+<span class="mi">11</span>      <span class="n">kevin</span><span class="p">.</span><span class="n">moore</span><span class="o">@</span><span class="n">example</span><span class="p">.</span><span class="n">com</span> <span class="n">Moore</span> <span class="n">Kevin</span>
+<span class="mi">12</span>      <span class="n">lisa</span><span class="p">.</span><span class="n">white</span><span class="o">@</span><span class="n">example</span><span class="p">.</span><span class="n">com</span>  <span class="n">White</span> <span class="n">Lisa</span>
+<span class="mi">13</span>      <span class="n">paul</span><span class="p">.</span><span class="n">wilson</span><span class="o">@</span><span class="n">example</span><span class="p">.</span><span class="n">com</span> <span class="n">Wilson</span> <span class="n">Paul</span>
+<span class="mi">14</span>      <span class="n">anna</span><span class="p">.</span><span class="n">jones</span><span class="o">@</span><span class="n">example</span><span class="p">.</span><span class="n">com</span>  <span class="n">Jones</span> <span class="n">Anna</span>
+<span class="mi">15</span>      <span class="n">thomas</span><span class="p">.</span><span class="n">hall</span><span class="o">@</span><span class="n">example</span><span class="p">.</span><span class="n">com</span> <span class="n">Hall</span> <span class="n">Thomas</span>
+<span class="mi">16</span>      <span class="n">karen</span><span class="p">.</span><span class="n">young</span><span class="o">@</span><span class="n">example</span><span class="p">.</span><span class="n">com</span> <span class="n">Young</span> <span class="n">Karen</span>
+<span class="mi">17</span>      <span class="n">james</span><span class="p">.</span><span class="n">scott</span><span class="o">@</span><span class="n">example</span><span class="p">.</span><span class="n">com</span> <span class="n">Scott</span> <span class="n">James</span>
+<span class="mi">18</span>      <span class="n">patricia</span><span class="p">.</span><span class="n">evans</span><span class="o">@</span><span class="n">example</span><span class="p">.</span><span class="n">com</span>      <span class="n">Evans</span> <span class="n">Patricia</span>
+<span class="mi">19</span>      <span class="n">robert</span><span class="p">.</span><span class="n">adams</span><span class="o">@</span><span class="n">example</span><span class="p">.</span><span class="n">com</span>        <span class="n">Adams</span> <span class="n">Robert</span>
+<span class="mi">20</span>      <span class="n">barbara</span><span class="p">.</span><span class="n">baker</span><span class="o">@</span><span class="n">example</span><span class="p">.</span><span class="n">com</span>       <span class="n">Baker</span> <span class="n">Barbara</span>
+<span class="err">\</span><span class="p">.</span>
+
+
+<span class="c1">--</span>
+<span class="c1">-- Name: customer_id_seq; Type: SEQUENCE SET; Schema: public; Owner: app</span>
+<span class="c1">--</span>
+
+<span class="k">SELECT</span> <span class="n">pg_catalog</span><span class="p">.</span><span class="n">setval</span><span class="p">(</span><span class="s1">'public.customer_id_seq'</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
+
+
+<span class="c1">--</span></code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -1073,6 +1159,18 @@ zahlreichen Vorteilen auch einige Nachteile.</p>
 </li>
 </ul>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Das kleinste Intervall eines Cron Jobs ist 1 Minute
+</td>
+</tr>
+</table>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -1194,24 +1292,219 @@ zahlreichen Vorteilen auch einige Nachteile.</p>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_warum_automatisierte_backups"><a class="anchor" href="#_warum_automatisierte_backups"></a>3.1. Warum automatisierte Backups?</h3>
-
+<div class="paragraph">
+<p>Eine oder mehrere Datenbanken manuell zu sichern, ist zeitaufwändig und fehleranfällig.<br>
+Automatisierte Backups sind eine effiziente Möglichkeit, regelmäßig Backups zu
+erstellen, ohne dass manuell eingegriffen werden muss.</p>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_backup_strategien"><a class="anchor" href="#_backup_strategien"></a>3.2. Backup-Strategien</h3>
-
+<div class="paragraph">
+<p>Es gibt verschiedene Backup-Strategien, die je nach Anforderungen und Umgebung eingesetzt werden können:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Vollständiges Backup</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Sichert die gesamte Datenbank.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Inkrementelles Backup</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Sichert nur die Änderungen seit dem letzten Backup.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Differenzielles Backup</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Sichert nur die Änderungen seit dem letzten vollständigen Backup.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_automatisierte_backups_mit_cronjobs"><a class="anchor" href="#_automatisierte_backups_mit_cronjobs"></a>4. Automatisierte Backups mit Cronjobs</h2>
+<h2 id="_cronjob_beispiel_in_kubernetes"><a class="anchor" href="#_cronjob_beispiel_in_kubernetes"></a>4. Cronjob Beispiel in Kubernetes</h2>
 <div class="sectionbody">
-<div class="sect2">
-<h3 id="_einrichtung_eines_cronjobs"><a class="anchor" href="#_einrichtung_eines_cronjobs"></a>4.1. Einrichtung eines Cronjobs</h3>
-
+<div class="listingblock">
+<div class="title">dbapp.yaml</div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="yaml"><span class="na">apiVersion</span><span class="pi">:</span> <span class="s">apps/v1</span>
+<span class="na">kind</span><span class="pi">:</span> <span class="s">Deployment</span>
+<span class="na">metadata</span><span class="pi">:</span>
+  <span class="na">name</span><span class="pi">:</span> <span class="s">dbapp</span>
+<span class="na">spec</span><span class="pi">:</span>
+  <span class="na">replicas</span><span class="pi">:</span> <span class="m">1</span>
+  <span class="na">selector</span><span class="pi">:</span>
+    <span class="na">matchLabels</span><span class="pi">:</span>
+      <span class="na">app</span><span class="pi">:</span> <span class="s">dbapp</span>
+  <span class="na">template</span><span class="pi">:</span>
+    <span class="na">metadata</span><span class="pi">:</span>
+      <span class="na">labels</span><span class="pi">:</span>
+        <span class="na">app</span><span class="pi">:</span> <span class="s">dbapp</span>
+    <span class="na">spec</span><span class="pi">:</span>
+      <span class="na">containers</span><span class="pi">:</span>
+        <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">appsrv</span>
+          <span class="na">image</span><span class="pi">:</span> <span class="s">ghcr.io/oliver-420/dbapp:latest</span>
+          <span class="na">imagePullPolicy</span><span class="pi">:</span> <span class="s">Always</span>
+          <span class="na">ports</span><span class="pi">:</span>
+            <span class="pi">-</span> <span class="na">containerPort</span><span class="pi">:</span> <span class="m">8080</span>
+<span class="nn">---</span>
+<span class="na">apiVersion</span><span class="pi">:</span> <span class="s">v1</span>
+<span class="na">kind</span><span class="pi">:</span> <span class="s">Service</span>
+<span class="na">metadata</span><span class="pi">:</span>
+  <span class="na">name</span><span class="pi">:</span> <span class="s">quarkus-service</span>
+<span class="na">spec</span><span class="pi">:</span>
+  <span class="na">ports</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="na">port</span><span class="pi">:</span> <span class="m">8080</span>
+      <span class="na">targetPort</span><span class="pi">:</span> <span class="m">8080</span>
+  <span class="na">selector</span><span class="pi">:</span>
+    <span class="na">app</span><span class="pi">:</span> <span class="s">dbapp</span></code></pre>
 </div>
-<div class="sect2">
-<h3 id="_beispiel_tägliches_backup"><a class="anchor" href="#_beispiel_tägliches_backup"></a>4.2. Beispiel: Tägliches Backup</h3>
+</div>
+<div class="listingblock">
+<div class="title">postgres.yaml</div>
+<div class="content">
+<pre class="rouge highlight"><code data-lang="yaml"><span class="na">apiVersion</span><span class="pi">:</span> <span class="s">v1</span>
+<span class="na">kind</span><span class="pi">:</span> <span class="s">PersistentVolumeClaim</span>
+<span class="na">metadata</span><span class="pi">:</span>
+  <span class="na">name</span><span class="pi">:</span> <span class="s">postgres-pvc</span>
+<span class="na">spec</span><span class="pi">:</span>
+  <span class="na">accessModes</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">ReadWriteOnce</span>
+  <span class="na">resources</span><span class="pi">:</span>
+    <span class="na">requests</span><span class="pi">:</span>
+      <span class="na">storage</span><span class="pi">:</span> <span class="s">1Gi</span>
 
+<span class="nn">---</span>
+<span class="na">apiVersion</span><span class="pi">:</span> <span class="s">v1</span>
+<span class="na">kind</span><span class="pi">:</span> <span class="s">Service</span>
+<span class="na">metadata</span><span class="pi">:</span>
+  <span class="na">name</span><span class="pi">:</span> <span class="s">postgresql-service</span>
+<span class="na">spec</span><span class="pi">:</span>
+  <span class="na">ports</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="na">port</span><span class="pi">:</span> <span class="m">5432</span>
+  <span class="na">selector</span><span class="pi">:</span>
+    <span class="na">app</span><span class="pi">:</span> <span class="s">postgresql</span>
+
+<span class="nn">---</span>
+<span class="na">apiVersion</span><span class="pi">:</span> <span class="s">apps/v1</span>
+<span class="na">kind</span><span class="pi">:</span> <span class="s">Deployment</span>
+<span class="na">metadata</span><span class="pi">:</span>
+  <span class="na">name</span><span class="pi">:</span> <span class="s">postgresql</span>
+<span class="na">spec</span><span class="pi">:</span>
+  <span class="na">selector</span><span class="pi">:</span>
+    <span class="na">matchLabels</span><span class="pi">:</span>
+      <span class="na">app</span><span class="pi">:</span> <span class="s">postgresql</span>
+  <span class="na">template</span><span class="pi">:</span>
+    <span class="na">metadata</span><span class="pi">:</span>
+      <span class="na">labels</span><span class="pi">:</span>
+        <span class="na">app</span><span class="pi">:</span> <span class="s">postgresql</span>
+    <span class="na">spec</span><span class="pi">:</span>
+      <span class="na">containers</span><span class="pi">:</span>
+        <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">postgresql</span>
+          <span class="na">image</span><span class="pi">:</span> <span class="s">postgres:15</span>
+          <span class="na">ports</span><span class="pi">:</span>
+            <span class="pi">-</span> <span class="na">containerPort</span><span class="pi">:</span> <span class="m">5432</span>
+          <span class="na">env</span><span class="pi">:</span>
+            <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">POSTGRES_DB</span>
+              <span class="na">value</span><span class="pi">:</span> <span class="s">db</span>
+            <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">POSTGRES_USER</span>
+              <span class="na">value</span><span class="pi">:</span> <span class="s">app</span>
+            <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">POSTGRES_PASSWORD</span>
+              <span class="na">value</span><span class="pi">:</span> <span class="s">app</span>
+          <span class="na">volumeMounts</span><span class="pi">:</span>
+            <span class="pi">-</span> <span class="na">mountPath</span><span class="pi">:</span> <span class="s">/var/lib/postgresql/data</span>
+              <span class="na">name</span><span class="pi">:</span> <span class="s">postgres-storage</span>
+          <span class="na">lifecycle</span><span class="pi">:</span>
+            <span class="na">postStart</span><span class="pi">:</span>
+              <span class="na">exec</span><span class="pi">:</span>
+                <span class="na">command</span><span class="pi">:</span>
+                  <span class="pi">-</span> <span class="s2">"</span><span class="s">/bin/sh"</span>
+                  <span class="pi">-</span> <span class="s2">"</span><span class="s">-c"</span>
+                  <span class="pi">-</span> <span class="s2">"</span><span class="s">apt-get</span><span class="nv"> </span><span class="s">update</span><span class="nv"> </span><span class="s">&amp;&amp;</span><span class="nv"> </span><span class="s">apt-get</span><span class="nv"> </span><span class="s">install</span><span class="nv"> </span><span class="s">-y</span><span class="nv"> </span><span class="s">nano"</span>
+      <span class="na">volumes</span><span class="pi">:</span>
+        <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">postgres-storage</span>
+          <span class="na">persistentVolumeClaim</span><span class="pi">:</span>
+            <span class="na">claimName</span><span class="pi">:</span> <span class="s">postgres-pvc</span>
+
+<span class="nn">---</span>
+<span class="na">apiVersion</span><span class="pi">:</span> <span class="s">batch/v1</span>
+<span class="na">kind</span><span class="pi">:</span> <span class="s">CronJob</span>
+<span class="na">metadata</span><span class="pi">:</span>
+  <span class="na">name</span><span class="pi">:</span> <span class="s">postgres-backup-cronjob</span>
+<span class="na">spec</span><span class="pi">:</span>
+  <span class="na">schedule</span><span class="pi">:</span> <span class="s2">"</span><span class="s">*/1</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*"</span>
+  <span class="na">successfulJobsHistoryLimit</span><span class="pi">:</span> <span class="m">3</span>
+  <span class="na">failedJobsHistoryLimit</span><span class="pi">:</span> <span class="m">1</span>
+  <span class="na">jobTemplate</span><span class="pi">:</span>
+    <span class="na">spec</span><span class="pi">:</span>
+      <span class="na">template</span><span class="pi">:</span>
+        <span class="na">spec</span><span class="pi">:</span>
+          <span class="na">restartPolicy</span><span class="pi">:</span> <span class="s">OnFailure</span>
+          <span class="na">containers</span><span class="pi">:</span>
+            <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">backup-container</span>
+              <span class="na">image</span><span class="pi">:</span> <span class="s">alpine:latest</span>
+              <span class="na">command</span><span class="pi">:</span>
+                <span class="pi">-</span> <span class="s2">"</span><span class="s">/bin/sh"</span>
+                <span class="pi">-</span> <span class="s2">"</span><span class="s">-c"</span>
+                <span class="pi">-</span> <span class="pi">|</span>
+                  <span class="s">apk add --no-cache postgresql-client bash curl &amp;&amp; \</span>
+                  <span class="s">POD_NAME=$(hostname) &amp;&amp; \</span>
+                  <span class="s">mkdir -p /var/lib/postgresql/data/db_backup &amp;&amp; \</span>
+                  <span class="s">cp /backup/backup.sh /var/lib/postgresql/data/db_backup/backup.sh &amp;&amp; \</span>
+                  <span class="s">chmod +x /var/lib/postgresql/data/db_backup/backup.sh &amp;&amp; \</span>
+                  <span class="s">/var/lib/postgresql/data/db_backup/backup.sh "$POD_NAME" &amp;&amp; \</span>
+                  <span class="s">find /var/lib/postgresql/data/db_backup -type f -name '*.sql' -mmin +3 -delete</span>
+              <span class="na">env</span><span class="pi">:</span>
+                <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">PGPASSWORD</span>
+                  <span class="na">value</span><span class="pi">:</span> <span class="s">app</span>
+              <span class="na">volumeMounts</span><span class="pi">:</span>
+                <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">postgres-storage</span>
+                  <span class="na">mountPath</span><span class="pi">:</span> <span class="s">/var/lib/postgresql/data</span>
+                <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">backup-script</span>
+                  <span class="na">mountPath</span><span class="pi">:</span> <span class="s">/backup</span>
+          <span class="na">volumes</span><span class="pi">:</span>
+            <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">postgres-storage</span>
+              <span class="na">persistentVolumeClaim</span><span class="pi">:</span>
+                <span class="na">claimName</span><span class="pi">:</span> <span class="s">postgres-pvc</span>
+            <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">backup-script</span>
+              <span class="na">configMap</span><span class="pi">:</span>
+                <span class="na">name</span><span class="pi">:</span> <span class="s">backup-script-configmap</span>
+
+<span class="nn">---</span>
+<span class="na">apiVersion</span><span class="pi">:</span> <span class="s">v1</span>
+<span class="na">kind</span><span class="pi">:</span> <span class="s">ConfigMap</span>
+<span class="na">metadata</span><span class="pi">:</span>
+  <span class="na">name</span><span class="pi">:</span> <span class="s">backup-script-configmap</span>
+<span class="na">data</span><span class="pi">:</span>
+  <span class="na">backup.sh</span><span class="pi">:</span> <span class="pi">|</span>
+    <span class="s">#!/bin/bash</span>
+    <span class="s">echo "Backup started..."</span>
+    <span class="s">export PGPASSWORD=app</span>
+    <span class="s">POD_NAME=$1</span>
+    <span class="s">mkdir -p /var/lib/postgresql/data/db_backup</span>
+    <span class="s">BACKUP_FILE="/var/lib/postgresql/data/db_backup/${POD_NAME}_$(date +%Y%m%d%H%M%S).sql"</span>
+    <span class="s">pg_dump -U app -h postgresql-service db &gt; "$BACKUP_FILE"</span>
+    <span class="s">echo "Backup completed! File: $BACKUP_FILE"</span></code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -1248,7 +1541,7 @@ zahlreichen Vorteilen auch einige Nachteile.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-12-12 21:58:34 UTC
+Last updated 2024-12-13 06:37:45 UTC
 </div>
 </div>
 </body>
